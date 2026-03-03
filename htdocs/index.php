@@ -318,6 +318,11 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
 $form = new Form($db);
 $formfile = new FormFile($db);
 $formproduct = new FormProduct($db);
+$sortfield = "";
+$sortorder = "asc";
+if(!isset($id_sw)) {$id_sw = 0;}
+if(!isset($id_product)) {$id_product = 0;}
+if(!isset($qty)) {$qty = 0;}
 ?>
 <?= llxHeader("", 'Stock Transform', '', '', 0, 0, '', '', '', 'StockTransform page-index'); ?>
 <?= load_fiche_titre('Stock Transform', '', 'fa-exchange-alt'); ?>
@@ -365,7 +370,7 @@ $formproduct = new FormProduct($db);
 
       </tr>
       
-      
+      <?php if(array_key_exists('s', $listofdata)): ?>
       <?php foreach($listofdata['s'] as $idx => $val): ?>
       <?php
         $error = 0;
@@ -392,6 +397,7 @@ $formproduct = new FormProduct($db);
         <td class="right"><a href="<?= $_SERVER["PHP_SELF"].'?action=delline&token='.newToken().'&idline='.$idx.'&s_or_t=s' ?>"> <?= img_delete($langs->trans("Remove")) ?></a></td>
       </tr>
       <?php endforeach; ?>
+      <?php endif; ?>
     
     </table>
   </div>
@@ -441,7 +447,7 @@ $formproduct = new FormProduct($db);
 
       </tr>
       
-      
+      <?php if(array_key_exists('t', $listofdata)): ?>
       <?php foreach($listofdata['t'] as $idx => $val): ?>
       <?php
         $error = 0;
@@ -468,7 +474,7 @@ $formproduct = new FormProduct($db);
         <td class="right"><a href="<?= $_SERVER["PHP_SELF"].'?action=delline&token='.newToken().'&idline='.$idx.'&s_or_t=t' ?>"> <?= img_delete($langs->trans("Remove")) ?></a></td>
       </tr>
       <?php endforeach; ?>
-    
+      <?php endif; ?>
     </table>
   </div>
 </form>
@@ -477,7 +483,7 @@ $formproduct = new FormProduct($db);
 
 <!-- Confirmation -->
 <?php if(array_key_exists('t', $listofdata) && (count($listofdata['t']) > 0)): ?>
-<form action="<?= $_SERVER["PHP_SELF"]; ?>" method="POST" name="formulaire3" class="formconsumeproduce">
+<form action="<?= $_SERVER["PHP_SELF"]; ?>" method="GET" name="formulaire3" class="formconsumeproduce">
 	<input type="hidden" name="token" value="<?= newToken(); ?>">
 	<input type="hidden" name="action" value="createmovements">
   
